@@ -1,9 +1,20 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.DogList" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.DogList" parent="Theme.Material3.DayNight">
+        <item name="toolbarStyle">@style/MyToolbar</item>
+
+        <item name="colorPrimary">@color/colorOnPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/colorPrimary</item>
+
     </style>
 
     <style name="Theme.DogList" parent="Base.Theme.DogList" />
+
+    <style name="MyToolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:displayOptions">showHome|showTitle|homeAsUp</item>
+        <item name="titleTextColor">@color/colorOnPrimary</item>
+    </style>
 </resources>
