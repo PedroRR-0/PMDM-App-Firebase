@@ -27,6 +27,7 @@ class MainActivity3 : ComponentActivity() {
             intent.putExtra("usuario", usuario)
             startActivity(intent)
         }
+
     }
 
     private fun mostrarUsuario(usuario: String?) {
@@ -43,6 +44,8 @@ class MainActivity3 : ComponentActivity() {
 
         // Establecemos el adaptador del RecyclerView con la lista obtenida de la base de datos
         binding.recyclerAnimal.adapter = AnimalAdapter(animalListFromDatabase)
+
+
     }
 
 }

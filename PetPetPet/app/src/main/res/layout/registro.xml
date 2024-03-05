@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondo1"
-    tools:context=".MainActivity">
-
+    tools:context=".Registro">
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="110dp"
@@ -52,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:text="@string/tituloLogin"
+                android:text="@string/registro"
                 android:textColor="@color/dark_primary"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -61,12 +60,12 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editTextUsername"
+                android:id="@+id/editTextUsernameRe"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 app:counterEnabled="true"
-                app:counterMaxLength="25"
+                app:counterMaxLength="100"
                 app:endIconMode="none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -85,60 +84,59 @@
                 android:id="@+id/editTextTextPassword"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 app:passwordToggleEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.504"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextUsername"
+                app:layout_constraintTop_toBottomOf="@+id/editTextUsernameRe"
                 app:passwordToggleTint="@color/primary_color">
 
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/contra"
+                    android:id="@+id/contra1Re"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/contrasenia"
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Switch
-                android:id="@+id/switch1"
-                android:layout_width="290dp"
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editTextTextPassword2"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/recuerdame"
+                android:layout_marginTop="40dp"
+                app:passwordToggleEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.500"
+                app:layout_constraintHorizontal_bias="0.504"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword"
-                tools:textSize="18sp"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
+                app:passwordToggleTint="@color/primary_color">
+
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/contra2Re"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/confirmaContra"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <Button
-                android:id="@+id/loginButton"
+                android:id="@+id/registerButton"
                 android:layout_width="300dp"
                 android:layout_height="60dp"
-                android:text="@string/login"
+                android:layout_marginBottom="40dp"
+                android:text="@string/registrarse"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/switch1" />
-
-            <TextView
-                android:id="@+id/txtregister"
-                android:layout_width="131dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="68dp"
-                android:text="@string/registrarse"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/loginButton"
-                app:layout_constraintVertical_bias="0.866"
-                tools:ignore="MissingConstraints" />
+                app:layout_constraintHorizontal_bias="0.506"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

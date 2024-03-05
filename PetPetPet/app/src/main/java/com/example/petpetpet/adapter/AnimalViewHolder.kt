@@ -16,5 +16,7 @@ class AnimalViewHolder(private val binding: ItemAnimalBinding) : RecyclerView.Vi
                 .load(animalModel.imagen)
                 .into(ivAnimal)
         }
+
+
     }
 }

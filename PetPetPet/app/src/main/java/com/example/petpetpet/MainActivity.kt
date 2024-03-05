@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.petpetpet.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val login: Button = binding.loginButton
+        val txtRegister: TextView = binding.txtregister;
         val editTextUser: TextInputLayout = binding.editTextUsername
         val editTextPassword: TextInputLayout = binding.editTextTextPassword
         val switchMaterial = binding.switch1
@@ -61,7 +63,13 @@ class MainActivity : AppCompatActivity() {
                 Snackbar.make(binding.root, "Usuario o contraseña incorrectos", Snackbar.LENGTH_SHORT).show()
             }
         }
+        txtRegister.setOnClickListener {
+            val intent = Intent(this, MainActivity2::class.java)
+            startActivity(intent)
+        }
     }
+
+
 
     private fun saveUserCredentials(username: String, password: String) {
         val editor = sharedPref.edit()

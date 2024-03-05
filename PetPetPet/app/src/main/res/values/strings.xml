@@ -2,7 +2,7 @@
     <string name="app_name">PetPetPet</string>
     <string name="bienvenido">Bienvenidos a PetPetPet</string>
     <string name="tituloLogin">Iniciar Sesión</string>
-    <string name="usuario">Usuario</string>
+    <string name="usuario">Correo electrónico</string>
     <string name="contrasenia">Contraseña</string>
     <string name="login">Login</string>
     <string name="recuerdame">Recuérdame</string>
@@ -22,4 +22,9 @@
     <string name="listaAnimalesAlmacenados">Lista de Animales Almacenados</string>
     <string name="volver">Volver</string>
     <string name="seleccionar_imagen">Seleccionar imagen</string>
+    <string name="registrarse">Registrate</string>
+    <string name="registro">Registro</string>
+    <string name="confirmaContra">Confirmar contraseña</string>
+
+
 </resources>
