@@ -48,16 +48,20 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Cod"/>
 
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="33dp"
-                android:layout_height="37dp"
-                android:background="@drawable/rounded_button"
+            <Button
+                android:id="@+id/btnMas"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:padding="0dp"
+                android:text="@string/mas"
+                android:textSize="25dp"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/primary_color"
+                android:background="@drawable/card_background"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tvAnimalCod"
                 app:layout_constraintStart_toEndOf="@+id/tvAnimalName"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_action_add" />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
