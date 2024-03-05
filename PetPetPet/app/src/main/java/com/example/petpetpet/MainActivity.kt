@@ -6,65 +6,55 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
+import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.petpetpet.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var sharedPref: SharedPreferences
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var editTextUser: TextInputLayout
+    private lateinit var editTextPassword: TextInputLayout
+    private lateinit var switchMaterial: Switch
 
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        firebaseAuth = FirebaseAuth.getInstance()
         val login: Button = binding.loginButton
         val txtRegister: TextView = binding.txtregister;
-        val editTextUser: TextInputLayout = binding.editTextUsername
-        val editTextPassword: TextInputLayout = binding.editTextTextPassword
-        val switchMaterial = binding.switch1
-
+        editTextUser = binding.editTextUsername
+        editTextPassword = binding.editTextTextPassword
+        switchMaterial = binding.switch1
         sharedPref = getSharedPreferences("UserCredentials", Context.MODE_PRIVATE)
-        val savedUser = sharedPref.getString("username", "")
-        val savedPassword = sharedPref.getString("password", "")
-
-        switchMaterial.isChecked = savedUser != "" && savedPassword != ""
+        val savedUser:String
+        val savedPassword:String
+        val usuario = intent.getStringExtra("usuario")
+        val pwd = intent.getStringExtra("pwd")
+        if(usuario.isNullOrBlank()){
+            savedUser = sharedPref.getString("username", "").toString()
+            savedPassword = sharedPref.getString("password", "").toString()
+            switchMaterial.isChecked = savedUser != "" && savedPassword != ""
+        } else {
+            savedUser = usuario
+            savedPassword = pwd.toString()
+            clearUserCredentials()
+        }
         editTextUser.editText?.setText(savedUser)
         editTextPassword.editText?.setText(savedPassword)
-
-        val db = BaseDatos(this)
-
         login.setOnClickListener {
-            val userText = editTextUser.editText?.text.toString()
-            val passwordText = editTextPassword.editText?.text.toString()
-
-            if (db.verificarUsuarioContrasena(userText, passwordText)) {
-                if (switchMaterial.isChecked) {
-                    saveUserCredentials(userText, passwordText)
-                    Snackbar.make(binding.root, "Credenciales guardadas", Snackbar.LENGTH_SHORT).show()
-                } else {
-                    clearUserCredentials()
-                    Snackbar.make(binding.root, "Credenciales eliminadas", Snackbar.LENGTH_SHORT).show()
-                }
-
-                val intent = Intent(this, MainActivity2::class.java)
-                intent.putExtra("usuario", userText)
-                startActivity(intent)
-
-                editTextUser.editText?.text?.clear()
-                editTextPassword.editText?.text?.clear()
-            } else {
-                Snackbar.make(binding.root, "Usuario o contraseña incorrectos", Snackbar.LENGTH_SHORT).show()
-            }
+            login()
         }
         txtRegister.setOnClickListener {
-            val intent = Intent(this, MainActivity2::class.java)
+            val intent = Intent(this, Registro::class.java)
             startActivity(intent)
         }
     }
@@ -83,6 +73,23 @@ class MainActivity : AppCompatActivity() {
         editor.remove("username")
         editor.remove("password")
         editor.apply()
+    }
+
+    private fun login(){
+        val userText = editTextUser.editText?.text.toString()
+        val passwordText = editTextPassword.editText?.text.toString()
+        firebaseAuth.signInWithEmailAndPassword(userText,passwordText)
+            .addOnSuccessListener {
+                if (switchMaterial.isChecked) {
+                    saveUserCredentials(userText, passwordText)
+                } else {
+                    clearUserCredentials()
+                }
+                //Aquí debemos pasar al siguiente activity con un intent
+            }
+            .addOnFailureListener {
+                Snackbar.make(binding.root, "Usuario o contraseña incorrectos", Snackbar.LENGTH_SHORT).show()
+            }
     }
 
 }
