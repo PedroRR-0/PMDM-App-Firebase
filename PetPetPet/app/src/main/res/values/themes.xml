@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.PetPetPet" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryDark">@color/dark_primary</item>
+        <item name="cardViewStyle">@style/CardViewStyle</item>
+        <item name="fontFamily">@font/muli_bold</item>
+    </style>
+    <style name="CardViewStyle" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:background">@drawable/card_background</item>
+        <item name="cardCornerRadius">30dp</item>
+        <item name="cardElevation">10dp</item>
+    </style>
+    <style name="Theme.PetPetPet" parent="Base.Theme.PetPetPet" />
+</resources>

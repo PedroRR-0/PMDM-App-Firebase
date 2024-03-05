@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">PetPetPet</string>
+    <string name="bienvenido">Bienvenidos a PetPetPet</string>
+    <string name="tituloLogin">Iniciar Sesión</string>
+    <string name="usuario">Usuario</string>
+    <string name="contrasenia">Contraseña</string>
+    <string name="login">Login</string>
+    <string name="recuerdame">Recuérdame</string>
+    <string name="usuario2">Usuario: </string>
+    <string name="tituloRegistro">Registro de Animales</string>
+    <string name="CodId">ID</string>
+    <string name="nombre">Nombre</string>
+    <string name="raza">Raza</string>
+    <string name="sexo">Sexo</string>
+    <string name="FechaNac">Fecha de Nacimiento</string>
+    <string name="DNI">DNI</string>
+    <string name="alta">Alta</string>
+    <string name="modificar">Modifica</string>
+    <string name="borra">Borra</string>
+    <string name="consulta">Consulta</string>
+    <string name="consulTodas">Consulta Todas</string>
+    <string name="listaAnimalesAlmacenados">Lista de Animales Almacenados</string>
+    <string name="volver">Volver</string>
+    <string name="seleccionar_imagen">Seleccionar imagen</string>
+</resources>
