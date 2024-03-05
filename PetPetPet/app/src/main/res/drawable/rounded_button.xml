@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- res/drawable/rounded_button.xml -->
+    <shape xmlns:android="http://schemas.android.com/apk/res/android">
+        <solid android:color="@android:color/transparent" />
+        <corners android:radius="16dp" /> <!-- Ajusta el radio según tus preferencias para hacer los bordes redondos -->
+    </shape>
+
+</selector>
