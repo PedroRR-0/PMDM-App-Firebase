@@ -11,12 +11,20 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.example.petpetpet.databinding.ActivityMain2Binding
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.Firebase
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.database
 import java.io.ByteArrayOutputStream
 import kotlin.random.Random
 
 class MainActivity2 : AppCompatActivity() {
     private lateinit var binding: ActivityMain2Binding
     private lateinit var db: BaseDatos
+
+    private lateinit var database: DatabaseReference
+
 
     private val funPasParam = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
@@ -35,7 +43,6 @@ class MainActivity2 : AppCompatActivity() {
         val usuario = intent.getStringExtra("usuario")
 
         mostrarUsuario(usuario)
-
         activarBtnAlta()
         activarBtnMod()
         activarBtnBorrar()
@@ -55,6 +62,7 @@ class MainActivity2 : AppCompatActivity() {
     private fun activarBtnAlta() {
 
         binding.alta.setOnClickListener {
+            altas()
             val codId = binding.CodId.text.toString()
             val nombre = binding.Nombre.text.toString()
             val raza = binding.Raza.text.toString()
@@ -154,6 +162,38 @@ class MainActivity2 : AppCompatActivity() {
             val intent = Intent(this, MainActivity3::class.java)
             intent.putExtra("usuario", usuario)
             startActivity(intent)
+        }
+    }
+    private fun altas() {
+        val codId = binding.CodId.text.toString()
+        val nombre = binding.Nombre.text.toString()
+        val raza = binding.Raza.text.toString()
+        val sexo = binding.Sexo.text.toString()
+        val fechaNac = binding.FechaNac.text.toString()
+        val dni = binding.DNI.text.toString()
+
+        val datosAnimal: HashMap<String, Any?> = HashMap()
+        datosAnimal["codId"] = codId
+        datosAnimal["nombre"] = nombre
+        datosAnimal["raza"] = raza
+        datosAnimal["sexo"] = sexo
+        datosAnimal["fechaNac"] = fechaNac
+        datosAnimal["dni"] = dni
+
+        val referenciaDB = FirebaseDatabase.getInstance().getReference("animales")
+        val nuevaClave = referenciaDB.child("animales").push().key
+
+        if (nuevaClave != null) {
+            referenciaDB.child(nuevaClave).setValue(datosAnimal)
+                .addOnSuccessListener {
+                    Snackbar.make(binding.root, "Success", Snackbar.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { err ->
+                    Toast.makeText(this, "$err", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            // Manejar el caso en que no se pudo generar una nueva clave
+            Toast.makeText(this, "No se pudo generar una nueva clave", Toast.LENGTH_SHORT).show()
         }
     }
 
