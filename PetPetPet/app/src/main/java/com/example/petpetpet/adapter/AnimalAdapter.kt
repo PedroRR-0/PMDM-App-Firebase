@@ -3,11 +3,11 @@ package com.example.petpetpet.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.petpetpet.Animal2
+import com.example.petpetpet.Animal
 import com.example.petpetpet.databinding.ItemAnimalBinding
 
 
-class AnimalAdapter(private val animalList: List<Animal2>) : RecyclerView.Adapter<AnimalViewHolder>() {
+class AnimalAdapter(private val animalList: List<Animal>) : RecyclerView.Adapter<AnimalViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnimalViewHolder {
         val inflater = LayoutInflater.from(parent.context)

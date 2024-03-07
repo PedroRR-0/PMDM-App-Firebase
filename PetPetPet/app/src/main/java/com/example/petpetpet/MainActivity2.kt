@@ -4,8 +4,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.text.InputType
-import android.widget.Button
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -53,7 +51,10 @@ class MainActivity2 : AppCompatActivity() {
 
     private fun mostrarUsuario(usuario: String?) {
         val textViewUsuario = binding.textViewUsuario
-        textViewUsuario.text = "Usuario: $usuario"
+        textViewUsuario.text = buildString {
+        append("Usuario: ")
+        append(usuario)
+    }
     }
 
     private fun activarBtnAlta() {
@@ -72,7 +73,7 @@ class MainActivity2 : AppCompatActivity() {
             val stream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
 
-            val animal = Animal2(codId, nombre, raza, sexo, fechaNac, dni)
+            val animal = Animal(codId, nombre, raza, sexo, fechaNac, dni)
             guardarAnimalEnFirebase(animal)
             limpiar()
         }
@@ -115,7 +116,7 @@ class MainActivity2 : AppCompatActivity() {
         }
     }
 
-    private fun guardarAnimalEnFirebase(animal: Animal2) {
+    private fun guardarAnimalEnFirebase(animal: Animal) {
         val referenciaDB = database.child("animales").push()
         referenciaDB.setValue(animal)
             .addOnSuccessListener {

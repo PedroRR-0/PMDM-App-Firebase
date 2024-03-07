@@ -5,11 +5,11 @@ import com.google.firebase.database.*
 
 class AnimalProvider {
     companion object {
-        fun getAnimalListFromDatabase(context: Context, callback: (List<Animal2>) -> Unit) {
+        fun getAnimalListFromDatabase(context: Context, callback: (List<Animal>) -> Unit) {
             val database = FirebaseDatabase.getInstance().reference
             val query: Query = database.child("animales")
 
-            val animalList = mutableListOf<Animal2>()
+            val animalList = mutableListOf<Animal>()
 
             query.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -21,7 +21,7 @@ class AnimalProvider {
                         val raza = animalSnapshot.child("raza").getValue(String::class.java)
                         val sexo = animalSnapshot.child("sexo").getValue(String::class.java)
 
-                        val animal = Animal2(codId.toString(), nombre.toString(), dni.toString(), fechaNac.toString(), raza.toString(), sexo.toString())
+                        val animal = Animal(codId.toString(), nombre.toString(), dni.toString(), fechaNac.toString(), raza.toString(), sexo.toString())
                         animalList.add(animal)
                     }
 
