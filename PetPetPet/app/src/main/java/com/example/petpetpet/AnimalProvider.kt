@@ -1,34 +1,39 @@
 package com.example.petpetpet
 
-import android.annotation.SuppressLint
 import android.content.Context
+import com.google.firebase.database.*
 
 class AnimalProvider {
-    companion object{
-        @SuppressLint("Range")
-        fun getAnimalListFromDatabase(context: Context): List<Animal> {
-            val dbHelper = BaseDatos(context)
-            val db = dbHelper.readableDatabase
-            val animalList = mutableListOf<Animal>()
+    companion object {
+        fun getAnimalListFromDatabase(context: Context, callback: (List<Animal2>) -> Unit) {
+            val database = FirebaseDatabase.getInstance().reference
+            val query: Query = database.child("animales")
 
-            val cursor = db.rawQuery("SELECT * FROM Animal", null)
+            val animalList = mutableListOf<Animal2>()
 
-            while (cursor.moveToNext()) {
-                val cod = cursor.getString(cursor.getColumnIndex("cod"))
-                val nombre = cursor.getString(cursor.getColumnIndex("nombre"))
-                val raza = cursor.getString(cursor.getColumnIndex("raza"))
-                val sexo = cursor.getString(cursor.getColumnIndex("sexo"))
-                val fechaNacimiento = cursor.getString(cursor.getColumnIndex("fechaNacimiento"))
-                val dni = cursor.getString(cursor.getColumnIndex("dni"))
-                val imagen = cursor.getBlob(cursor.getColumnIndex("imagen"))
-                val animal = Animal(cod, nombre, raza, sexo, fechaNacimiento, dni, imagen)
-                animalList.add(animal)
-            }
+            query.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (animalSnapshot in snapshot.children) {
+                        val codId = animalSnapshot.child("codId").getValue(String::class.java)
+                        val nombre = animalSnapshot.child("nombre").getValue(String::class.java)
+                        val dni = animalSnapshot.child("dni").getValue(String::class.java)
+                        val fechaNac = animalSnapshot.child("fechaNac").getValue(String::class.java)
+                        val raza = animalSnapshot.child("raza").getValue(String::class.java)
+                        val sexo = animalSnapshot.child("sexo").getValue(String::class.java)
 
-            cursor.close()
-            db.close()
+                        val animal = Animal2(codId.toString(), nombre.toString(), dni.toString(), fechaNac.toString(), raza.toString(), sexo.toString())
+                        animalList.add(animal)
+                    }
 
-            return animalList
+                    // Llama al callback con la lista de animales una vez que se ha recorrido la base de datos
+                    callback(animalList)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Maneja el caso de error en la consulta
+                    // Puedes agregar un manejo de errores según tus necesidades
+                }
+            })
         }
     }
 }
