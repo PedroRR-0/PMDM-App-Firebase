@@ -41,12 +41,11 @@ class MainActivity3 : ComponentActivity() {
         binding.recyclerAnimal.layoutManager = LinearLayoutManager(this)
 
         // Obtener la lista de animales desde la base de datos
-        val animalListFromDatabase = AnimalProvider.getAnimalListFromDatabase(this)
-
-        // Establecemos el adaptador del RecyclerView con la lista obtenida de la base de datos
-        binding.recyclerAnimal.adapter = AnimalAdapter(animalListFromDatabase)
-
-
+        AnimalProvider.getAnimalListFromDatabase(this) { animalListFromDatabase ->
+            // Establecemos el adaptador del RecyclerView con la lista obtenida de la base de datos
+            binding.recyclerAnimal.adapter = AnimalAdapter(animalListFromDatabase)
+        }
     }
+
 
 }
