@@ -1,6 +1,7 @@
-package com.example.petpetpet
+package com.example.petpetpet.adapter
 
 import android.content.Context
+import com.example.petpetpet.Animal
 import com.google.firebase.database.*
 
 class AnimalProvider {

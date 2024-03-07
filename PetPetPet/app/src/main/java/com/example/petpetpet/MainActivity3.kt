@@ -2,11 +2,12 @@ package com.example.petpetpet
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.petpetpet.adapter.AnimalAdapter
+import com.example.petpetpet.adapter.AnimalProvider
 import com.example.petpetpet.databinding.ActivityMain3Binding
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity3 : ComponentActivity() {
 
@@ -39,7 +40,6 @@ class MainActivity3 : ComponentActivity() {
     // Método para inicializar el RecyclerView
     private fun initRecyclerView() {
         binding.recyclerAnimal.layoutManager = LinearLayoutManager(this)
-
         // Obtener la lista de animales desde la base de datos
         AnimalProvider.getAnimalListFromDatabase(this) { animalListFromDatabase ->
             // Establecemos el adaptador del RecyclerView con la lista obtenida de la base de datos
