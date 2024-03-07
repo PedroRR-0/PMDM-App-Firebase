@@ -16,7 +16,8 @@ class MainActivity3 : ComponentActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMain3Binding.inflate(layoutInflater)
         setContentView(binding.root)
-        val usuario = intent.getStringExtra("usuario")
+        val intentRecup = intent
+        val usuario = intentRecup.getStringExtra("usuario")
         mostrarUsuario(usuario)
         initRecyclerView()
         binding.backToMainActivity2.setOnClickListener {
@@ -29,7 +30,10 @@ class MainActivity3 : ComponentActivity() {
 
     private fun mostrarUsuario(usuario: String?) {
         val textViewUsuario = binding.textView4
-        textViewUsuario.text = "Usuario: $usuario"
+        textViewUsuario.text = buildString {
+        append("Usuario: ")
+        append(usuario.toString())
+    }
     }
 
     // Método para inicializar el RecyclerView
