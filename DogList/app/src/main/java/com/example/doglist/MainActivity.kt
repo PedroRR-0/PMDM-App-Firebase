@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
     }
 
     private fun lanzarRecyclerView() {
-        adapter = PerroAdaptador(fotoPerro)
+        adapter = PerroAdaptador(fotoPerro, this)
         bindeo.PerrosReciclados.layoutManager = LinearLayoutManager(this)
         bindeo.PerrosReciclados.adapter = adapter
 
