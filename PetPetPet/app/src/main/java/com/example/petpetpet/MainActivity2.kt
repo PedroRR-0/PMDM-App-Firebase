@@ -6,25 +6,23 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.InputType
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.example.petpetpet.databinding.ActivityMain2Binding
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.Firebase
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.database
+import com.google.firebase.database.Query
+import com.google.firebase.database.ValueEventListener
 import java.io.ByteArrayOutputStream
 import kotlin.random.Random
 
 class MainActivity2 : AppCompatActivity() {
     private lateinit var binding: ActivityMain2Binding
-    private lateinit var db: BaseDatos
-
     private lateinit var database: DatabaseReference
-
 
     private val funPasParam = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
@@ -38,7 +36,7 @@ class MainActivity2 : AppCompatActivity() {
         binding = ActivityMain2Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        db = BaseDatos(this)
+        database = FirebaseDatabase.getInstance().reference
 
         val usuario = intent.getStringExtra("usuario")
 
@@ -51,18 +49,15 @@ class MainActivity2 : AppCompatActivity() {
 
         onBackPressedDispatcher.addCallback(this, funPasParam)
         funPasParam.isEnabled = true
-
     }
 
     private fun mostrarUsuario(usuario: String?) {
-        val textViewUsuario: TextView = binding.textViewUsuario
+        val textViewUsuario = binding.textViewUsuario
         textViewUsuario.text = "Usuario: $usuario"
     }
 
     private fun activarBtnAlta() {
-
         binding.alta.setOnClickListener {
-            altas()
             val codId = binding.CodId.text.toString()
             val nombre = binding.Nombre.text.toString()
             val raza = binding.Raza.text.toString()
@@ -71,100 +66,67 @@ class MainActivity2 : AppCompatActivity() {
             val dni = binding.DNI.text.toString()
 
             val imagenes = arrayOf(R.drawable.imagen1, R.drawable.imagen2, R.drawable.imagen3, R.drawable.imagen4)
-
             val imagenAleatoria = imagenes[Random.nextInt(imagenes.size)]
 
             val bitmap = BitmapFactory.decodeResource(resources, imagenAleatoria)
-
             val stream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-            val imagen = stream.toByteArray()
 
-            val resultado = db.insertarAnimal(codId, nombre, raza, sexo, fechaNac, dni, imagen)
-
-            if (resultado) {
-                Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Error al registrar el animal", Toast.LENGTH_SHORT).show()
-            }
+            val animal = Animal2(codId, nombre, raza, sexo, fechaNac, dni)
+            guardarAnimalEnFirebase(animal)
+            limpiar()
         }
     }
 
-
     private fun activarBtnMod() {
-        val buttonModifica: Button = binding.modifica
-        buttonModifica.setOnClickListener {
-            val codId = binding.CodId.text.toString()
-            val nombre = binding.Nombre.text.toString()
-            val raza = binding.Raza.text.toString()
-            val sexo = binding.Sexo.text.toString()
-            val fechaNac = binding.FechaNac.text.toString()
-            val dni = binding.DNI.text.toString()
-
-                val resultado = db.modificarAnimal(codId, nombre, raza, sexo, fechaNac, dni)
-
-                if (resultado) {
-                    Toast.makeText(this, "Modificación exitosa", Toast.LENGTH_SHORT).show()
-                } else {
-                }
+        binding.modifica.setOnClickListener {
+            // Actualizar el animal en Firebase
+            actualizarAnimalEnFirebase()
         }
     }
 
     private fun activarBtnBorrar() {
-        val buttonBorra: Button = binding.borra
-        buttonBorra.setOnClickListener {
+        binding.borra.setOnClickListener {
+            // Obtener el código del animal a borrar
             val codId = binding.CodId.text.toString()
 
-            val resultado = db.borrarAnimal(codId)
-
-            if (resultado) {
-                Toast.makeText(this, "Borrado exitoso", Toast.LENGTH_SHORT).show()
-                binding.CodId.text?.clear()
-                binding.Nombre.text?.clear()
-                binding.Raza.text?.clear()
-                binding.Sexo.text?.clear()
-                binding.FechaNac.text?.clear()
-                binding.DNI.text?.clear()
-            } else {
-                Toast.makeText(this, "Error al borrar el animal", Toast.LENGTH_SHORT).show()
-            }
+            // Borrar el animal en Firebase
+            borrarAnimalEnFirebase(codId)
         }
     }
 
     private fun activarBtnConsulta() {
-        val buttonConsulta: Button = binding.consulta
-        buttonConsulta.setOnClickListener {
+        binding.consulta.setOnClickListener {
+            // Obtener el código del animal a consultar
             val codId = binding.CodId.text.toString()
 
-            val animal = db.consultarAnimal(codId)
-            Toast.makeText(this, "Error al modificar el animal", Toast.LENGTH_SHORT).show()
-
-
-            if (animal != null) {
-                binding.Nombre.setText(animal.nombre)
-                binding.Raza.setText(animal.raza)
-                binding.Sexo.setText(animal.sexo)
-                binding.FechaNac.setText(animal.fechaNac)
-                binding.DNI.setText(animal.dni)
-
-                Toast.makeText(this, "Consulta exitosa", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "No se encontró el animal con el código $codId", Toast.LENGTH_SHORT).show()
-            }
+            // Consultar el animal en Firebase
+            consultarAnimalEnFirebase(codId)
         }
     }
 
     private fun activarBtnConsTodas() {
-        val buttonConsulTodas: Button = binding.consulTodas
-        buttonConsulTodas.setOnClickListener {
+        binding.consulTodas.setOnClickListener {
+            // Redirigir a la actividad que muestra todas las mascotas
             val usuario = intent.getStringExtra("usuario")
-
             val intent = Intent(this, MainActivity3::class.java)
             intent.putExtra("usuario", usuario)
             startActivity(intent)
         }
     }
-    private fun altas() {
+
+    private fun guardarAnimalEnFirebase(animal: Animal2) {
+        val referenciaDB = database.child("animales").push()
+        referenciaDB.setValue(animal)
+            .addOnSuccessListener {
+                Snackbar.make(binding.root, "Registro exitoso", Snackbar.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { err ->
+                Toast.makeText(this, "Error al registrar el animal: $err", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun actualizarAnimalEnFirebase() {
         val codId = binding.CodId.text.toString()
         val nombre = binding.Nombre.text.toString()
         val raza = binding.Raza.text.toString()
@@ -172,35 +134,129 @@ class MainActivity2 : AppCompatActivity() {
         val fechaNac = binding.FechaNac.text.toString()
         val dni = binding.DNI.text.toString()
 
-        val datosAnimal: HashMap<String, Any?> = HashMap()
-        datosAnimal["codId"] = codId
-        datosAnimal["nombre"] = nombre
-        datosAnimal["raza"] = raza
-        datosAnimal["sexo"] = sexo
-        datosAnimal["fechaNac"] = fechaNac
-        datosAnimal["dni"] = dni
+        val query: Query = database.child("animales")
 
-        val referenciaDB = FirebaseDatabase.getInstance().getReference("animales")
-        val nuevaClave = referenciaDB.child("animales").push().key
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var animalEncontrado = false
 
-        if (nuevaClave != null) {
-            referenciaDB.child(nuevaClave).setValue(datosAnimal)
-                .addOnSuccessListener {
-                    Snackbar.make(binding.root, "Success", Snackbar.LENGTH_SHORT).show()
+                for (animalSnapshot in snapshot.children) {
+                    if (animalSnapshot.child("codId").getValue(String::class.java) == codId) {
+                        // Actualizar los datos del animal en la base de datos
+                        val referenciaDB = database.child("animales").child(animalSnapshot.key!!)
+                        referenciaDB.child("nombre").setValue(nombre)
+                        referenciaDB.child("raza").setValue(raza)
+                        referenciaDB.child("sexo").setValue(sexo)
+                        referenciaDB.child("fechaNac").setValue(fechaNac)
+                        referenciaDB.child("dni").setValue(dni)
+
+                        Snackbar.make(binding.root, "Actualización exitosa", Snackbar.LENGTH_SHORT).show()
+                        animalEncontrado = true
+                        limpiar()
+                        break  // Salir del bucle después de encontrar y actualizar el animal
+                    }
                 }
-                .addOnFailureListener { err ->
-                    Toast.makeText(this, "$err", Toast.LENGTH_SHORT).show()
+
+                if (!animalEncontrado) {
+                    Toast.makeText(this@MainActivity2, "No existe el animal con el código $codId", Toast.LENGTH_SHORT).show()
                 }
-        } else {
-            // Manejar el caso en que no se pudo generar una nueva clave
-            Toast.makeText(this, "No se pudo generar una nueva clave", Toast.LENGTH_SHORT).show()
-        }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Manejar el caso de error en la consulta
+                Toast.makeText(this@MainActivity2, "Error al consultar la base de datos: ${databaseError.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun borrarAnimalEnFirebase(codId: String) {
+        val query: Query = database.child("animales")
+
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var animalEncontrado = false
+
+                for (animalSnapshot in snapshot.children) {
+                    if (animalSnapshot.child("codId").getValue(String::class.java) == codId) {
+                        val referenciaDB = database.child("animales").child(animalSnapshot.key!!)
+                        referenciaDB.removeValue()
+                            .addOnSuccessListener {
+                                Toast.makeText(this@MainActivity2, "Borrado exitoso", Toast.LENGTH_SHORT).show()
+                               limpiar()
+                            }
+                            .addOnFailureListener { err ->
+                                Toast.makeText(this@MainActivity2, "Error al borrar el animal: $err", Toast.LENGTH_SHORT).show()
+                            }
+
+                        animalEncontrado = true
+                        break  // Salir del bucle después de encontrar y borrar el animal
+                    }
+                }
+
+                if (!animalEncontrado) {
+                    Toast.makeText(this@MainActivity2, "No existe el animal con el código $codId", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Manejar el caso de error en la consulta
+                Toast.makeText(this@MainActivity2, "Error al consultar la base de datos: ${databaseError.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+
+    private fun consultarAnimalEnFirebase(codId: String) {
+        val database = FirebaseDatabase.getInstance().reference
+        val query: Query = database.child("animales")
+
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var animalEncontrado = false
+
+                for (animalSnapshot in snapshot.children) {
+                    if (animalSnapshot.child("codId").getValue(String::class.java) == codId) {
+                        val nombre = animalSnapshot.child("nombre").getValue(String::class.java)
+                        val dni = animalSnapshot.child("dni").getValue(String::class.java)
+                        val fechaNac = animalSnapshot.child("fechaNac").getValue(String::class.java)
+                        val raza = animalSnapshot.child("raza").getValue(String::class.java)
+                        val sexo = animalSnapshot.child("sexo").getValue(String::class.java)
+
+                        binding.Nombre.setText(nombre)
+                        binding.Raza.setText(raza)
+                        binding.Sexo.setText(sexo)
+                        binding.FechaNac.setText(fechaNac)
+                        binding.DNI.setText(dni)
+
+                        animalEncontrado = true
+                        break  // Salir del bucle después de encontrar el animal
+                    }
+                }
+
+                if (!animalEncontrado) {
+                    Toast.makeText(this@MainActivity2, "No existe el animal con el código $codId", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Manejar el caso de error en la consulta
+                Toast.makeText(this@MainActivity2, "Error al consultar la base de datos: ${databaseError.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun limpiar(){
+        binding.CodId.text?.clear()
+        binding.Nombre.text?.clear()
+        binding.Raza.text?.clear()
+        binding.Sexo.text?.clear()
+        binding.FechaNac.text?.clear()
+        binding.DNI.text?.clear()
     }
 
 
 
     override fun onDestroy() {
-        db.close()
         super.onDestroy()
     }
 }

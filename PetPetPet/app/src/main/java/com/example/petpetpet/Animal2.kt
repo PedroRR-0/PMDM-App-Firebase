@@ -3,7 +3,7 @@ package com.example.petpetpet
 import java.util.Date
 
 class Animal2 {
-    var cod : String = ""
+    var codId : String = ""
     var nombre : String = ""
     var raza : String = ""
     var sexo : String = ""
@@ -11,7 +11,7 @@ class Animal2 {
     var dni : String = ""
 
     constructor(cod: String, nombre: String, raza: String, sexo: String, fechaNac: String, dni: String){
-        this.cod = cod
+        this.codId = cod
         this.nombre = nombre
         this.raza = raza
         this.sexo = sexo
