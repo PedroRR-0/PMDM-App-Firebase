@@ -37,7 +37,6 @@
         android:layout_height="18dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
-        android:text="@string/usuario2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

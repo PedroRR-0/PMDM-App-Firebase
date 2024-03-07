@@ -8,12 +8,19 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Switch
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.petpetpet.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.getValue
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,7 +30,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var editTextUser: TextInputLayout
     private lateinit var editTextPassword: TextInputLayout
     private lateinit var switchMaterial: Switch
-
+    private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var databaseReference: DatabaseReference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -80,16 +88,40 @@ class MainActivity : AppCompatActivity() {
         val passwordText = editTextPassword.editText?.text.toString()
         firebaseAuth.signInWithEmailAndPassword(userText,passwordText)
             .addOnSuccessListener {
+                firebaseDatabase = FirebaseDatabase.getInstance()
+                databaseReference = firebaseDatabase.getReference("usuarios")
+                val uid = firebaseAuth.uid
                 if (switchMaterial.isChecked) {
                     saveUserCredentials(userText, passwordText)
                 } else {
                     clearUserCredentials()
                 }
-                //Aquí debemos pasar al siguiente activity con un intent
+                Toast.makeText(this,"Conectado con éxito",Toast.LENGTH_SHORT).show()
+                isAdmin(uid!!,userText)
             }
             .addOnFailureListener {
                 Snackbar.make(binding.root, "Usuario o contraseña incorrectos", Snackbar.LENGTH_SHORT).show()
             }
     }
 
-}
+    private fun isAdmin(uid: String,userText:String) {
+        val usrRef = databaseReference.child(uid)
+        usrRef.get()
+            .addOnSuccessListener {
+                val admin = it.child("admin").value.toString()
+                if(admin.toBoolean()){
+                    val intent = Intent(this, MainActivity2::class.java)
+                    intent.putExtra("usuario", userText)
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(this, MainActivity3::class.java)
+                    intent.putExtra("usuario", userText)
+                    startActivity(intent)
+                }
+        }.addOnFailureListener {
+            Snackbar.make(binding.root, "ce mnamoooooo", Snackbar.LENGTH_SHORT).show()
+        }
+        }
+    }
+
+

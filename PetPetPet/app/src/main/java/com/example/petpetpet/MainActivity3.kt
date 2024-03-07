@@ -16,13 +16,10 @@ class MainActivity3 : ComponentActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMain3Binding.inflate(layoutInflater)
         setContentView(binding.root)
-
         val usuario = intent.getStringExtra("usuario")
         mostrarUsuario(usuario)
         initRecyclerView()
-
         binding.backToMainActivity2.setOnClickListener {
-            val usuario = intent.getStringExtra("usuario")
             val intent = Intent(this, MainActivity2::class.java)
             intent.putExtra("usuario", usuario)
             startActivity(intent)
@@ -31,7 +28,7 @@ class MainActivity3 : ComponentActivity() {
     }
 
     private fun mostrarUsuario(usuario: String?) {
-        val textViewUsuario: TextView = binding.textView4
+        val textViewUsuario = binding.textView4
         textViewUsuario.text = "Usuario: $usuario"
     }
 
