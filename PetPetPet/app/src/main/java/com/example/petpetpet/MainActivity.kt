@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity() {
                 if(admin.toBoolean()){
                     val intent = Intent(this, MainActivity2::class.java)
                     intent.putExtra("usuario", userText)
-                    intent.putExtra("url", "https://img2.rtve.es/i/?w=1600&i=01709869973062.jpg")
+                    intent.putExtra("url", "https://www.tuperroesbienvenido.com/wp-content/uploads/2018/04/Logo-1-green.png")
                     startActivity(intent)
                 } else {
                     val intent = Intent(this, MainActivity3::class.java)

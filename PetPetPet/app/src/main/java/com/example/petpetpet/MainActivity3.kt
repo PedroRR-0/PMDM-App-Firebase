@@ -35,7 +35,7 @@ class MainActivity3 : ComponentActivity() {
         binding.backToMainActivity2.setOnClickListener {
             val intent = Intent(this, MainActivity2::class.java)
             intent.putExtra("usuario", usuario)
-            intent.putExtra("url", "https://img2.rtve.es/i/?w=1600&i=01709869973062.jpg")
+            intent.putExtra("url", "https://www.tuperroesbienvenido.com/wp-content/uploads/2018/04/Logo-1-green.png")
             startActivity(intent)
         }
         onBackPressedDispatcher.addCallback(this, funPasParam)
