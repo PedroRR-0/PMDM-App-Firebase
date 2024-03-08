@@ -19,8 +19,7 @@ import com.google.firebase.database.ValueEventListener
 class MainActivity2 : AppCompatActivity() {
     private lateinit var binding: ActivityMain2Binding
     private lateinit var database: DatabaseReference
-    var usuario: String = "usuario"
-
+    var usuario = "usuario"
 
     private val funPasParam = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
@@ -39,7 +38,7 @@ class MainActivity2 : AppCompatActivity() {
         usuario = intent.getStringExtra("usuario").toString()
 
 
-        val urlDefault = "https://www.dzoom.org.es/wp-content/uploads/2006/11/balance-de-blancos-menu-camara-1024x617.jpg"
+        val urlDefault = intent.getStringExtra("url")
         Glide.with(this)
             .load(urlDefault)
             .into(binding.imageView2)
@@ -154,7 +153,7 @@ class MainActivity2 : AppCompatActivity() {
                         referenciaDB.child("sexo").setValue(sexo)
                         referenciaDB.child("fechaNac").setValue(fechaNac)
                         referenciaDB.child("dni").setValue(dni)
-                        referenciaDB.child("urlFoto").setValue(urlFoto)
+                        referenciaDB.child("imagen").setValue(urlFoto)
 
                         Snackbar.make(binding.root, "Actualización exitosa", Snackbar.LENGTH_SHORT).show()
                         animalEncontrado = true
@@ -227,7 +226,7 @@ class MainActivity2 : AppCompatActivity() {
                         val fechaNac = animalSnapshot.child("fechaNac").getValue(String::class.java)
                         val raza = animalSnapshot.child("raza").getValue(String::class.java)
                         val sexo = animalSnapshot.child("sexo").getValue(String::class.java)
-                        val urlFoto = animalSnapshot.child("urlFoto").getValue(String::class.java)
+                        val urlFoto = animalSnapshot.child("imagen").getValue(String::class.java)
 
                         binding.Nombre.setText(nombre)
                         binding.Raza.setText(raza)

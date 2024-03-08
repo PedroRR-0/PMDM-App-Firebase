@@ -112,6 +112,7 @@ class MainActivity : AppCompatActivity() {
                 if(admin.toBoolean()){
                     val intent = Intent(this, MainActivity2::class.java)
                     intent.putExtra("usuario", userText)
+                    intent.putExtra("url", "https://img2.rtve.es/i/?w=1600&i=01709869973062.jpg")
                     startActivity(intent)
                 } else {
                     val intent = Intent(this, MainActivity3::class.java)
@@ -119,7 +120,7 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
         }.addOnFailureListener {
-            Snackbar.make(binding.root, "ce mnamoooooo", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(binding.root, "Error", Snackbar.LENGTH_SHORT).show()
         }
         }
     }

@@ -1,8 +1,10 @@
 package com.example.petpetpet
 
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.example.petpetpet.databinding.DatosAnimalBinding
 import com.google.firebase.Firebase
 import com.google.firebase.database.*
@@ -25,6 +27,7 @@ class DatosAnimal : AppCompatActivity() {
         var sexo: TextView = binding.sexo
         var fechna: TextView = binding.fechNaci
         var dni: TextView = binding.dni
+        var foto: ImageView = binding.imageView
 
         database = FirebaseDatabase.getInstance().reference
 
@@ -48,6 +51,10 @@ class DatosAnimal : AppCompatActivity() {
                     sexo.text = animalSnapshot.child("sexo").getValue(String::class.java)
                     fechna.text = animalSnapshot.child("fechaNac").getValue(String::class.java)
                     dni.text = animalSnapshot.child("dni").getValue(String::class.java)
+                    Glide.with(binding.imageView.context)
+                        .load(animalSnapshot.child("imagen").getValue(String::class.java))
+                        .into(binding.imageView)
+
 
 
 
