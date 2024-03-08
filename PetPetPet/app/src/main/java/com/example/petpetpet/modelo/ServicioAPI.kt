@@ -1,4 +1,4 @@
-package com.example.doglist.modelo
+package com.example.petpetpet.modelo
 
 import retrofit2.Response
 import retrofit2.http.GET

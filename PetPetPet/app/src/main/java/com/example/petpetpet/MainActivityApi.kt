@@ -1,34 +1,37 @@
-package com.example.doglist
+package com.example.petpetpet
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.doglist.databinding.ActivityMainBinding
-import com.example.doglist.modelo.PerroAdaptador
-import com.example.doglist.modelo.ServicioAPI
+import com.example.petpetpet.databinding.ActivityApiBinding
+import com.example.petpetpet.modelo.PerroAdaptador
+import com.example.petpetpet.modelo.ServicioAPI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivity : AppCompatActivity(), OnQueryTextListener {
-    private lateinit var bindeo :ActivityMainBinding
+class MainActivityApi : AppCompatActivity(), OnQueryTextListener {
+    private lateinit var bindeo :ActivityApiBinding
     private lateinit var adapter: PerroAdaptador
     private val fotoPerro = mutableListOf<String>()
+    var usuario = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bindeo = ActivityMainBinding.inflate(layoutInflater)
+        bindeo = ActivityApiBinding.inflate(layoutInflater)
         setContentView(bindeo.root)
+        usuario = intent.getStringExtra("usuario").toString()
+
         bindeo.busquedaPerro.setOnQueryTextListener(this)
         lanzarRecyclerView()
     }
 
     private fun lanzarRecyclerView() {
-        adapter = PerroAdaptador(fotoPerro, this)
+        adapter = PerroAdaptador(fotoPerro, this, usuario)
         bindeo.PerrosReciclados.layoutManager = LinearLayoutManager(this)
         bindeo.PerrosReciclados.adapter = adapter
 

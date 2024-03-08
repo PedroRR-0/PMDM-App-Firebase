@@ -2,6 +2,7 @@ package com.example.petpetpet.adapter
 
 import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.petpetpet.databinding.ItemAnimalBinding
 import com.example.petpetpet.Animal
 import com.example.petpetpet.DatosAnimal
@@ -13,9 +14,9 @@ class AnimalViewHolder(private val binding: ItemAnimalBinding) : RecyclerView.Vi
             tvAnimalName.text = animalModel.nombre
             tvAnimalCod.text = animalModel.codId
 
-            /*Glide.with(itemView.context)
+            Glide.with(itemView.context)
                 .load(animalModel.imagen)
-                .into(ivAnimal)*/
+                .into(ivAnimal)
         }
 
         binding.btnMas.setOnClickListener{

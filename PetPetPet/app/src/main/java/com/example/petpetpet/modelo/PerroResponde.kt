@@ -1,4 +1,4 @@
-package com.example.doglist.modelo
+package com.example.petpetpet.modelo
 
 import com.google.gson.annotations.SerializedName
 

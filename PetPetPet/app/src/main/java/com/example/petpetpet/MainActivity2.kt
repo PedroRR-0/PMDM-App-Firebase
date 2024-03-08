@@ -1,12 +1,12 @@
 package com.example.petpetpet
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.example.petpetpet.databinding.ActivityMain2Binding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
@@ -15,12 +15,12 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
-import java.io.ByteArrayOutputStream
-import kotlin.random.Random
 
 class MainActivity2 : AppCompatActivity() {
     private lateinit var binding: ActivityMain2Binding
     private lateinit var database: DatabaseReference
+    var usuario: String = "usuario"
+
 
     private val funPasParam = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
@@ -36,7 +36,14 @@ class MainActivity2 : AppCompatActivity() {
 
         database = FirebaseDatabase.getInstance().reference
 
-        val usuario = intent.getStringExtra("usuario")
+        usuario = intent.getStringExtra("usuario").toString()
+
+
+        val urlDefault = "https://www.dzoom.org.es/wp-content/uploads/2006/11/balance-de-blancos-menu-camara-1024x617.jpg"
+        Glide.with(this)
+            .load(urlDefault)
+            .into(binding.imageView2)
+
 
         mostrarUsuario(usuario)
         activarBtnAlta()
@@ -44,6 +51,7 @@ class MainActivity2 : AppCompatActivity() {
         activarBtnBorrar()
         activarBtnConsulta()
         activarBtnConsTodas()
+        foto()
 
         onBackPressedDispatcher.addCallback(this, funPasParam)
         funPasParam.isEnabled = true
@@ -66,14 +74,9 @@ class MainActivity2 : AppCompatActivity() {
             val fechaNac = binding.FechaNac.text.toString()
             val dni = binding.DNI.text.toString()
 
-            val imagenes = arrayOf(R.drawable.imagen1, R.drawable.imagen2, R.drawable.imagen3, R.drawable.imagen4)
-            val imagenAleatoria = imagenes[Random.nextInt(imagenes.size)]
+            val urlFoto = intent.getStringExtra("url")
 
-            val bitmap = BitmapFactory.decodeResource(resources, imagenAleatoria)
-            val stream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-
-            val animal = Animal(codId, nombre, raza, sexo, fechaNac, dni)
+            val animal = Animal(codId, nombre, raza, sexo, fechaNac, dni, urlFoto)
             guardarAnimalEnFirebase(animal)
             limpiar()
         }
@@ -134,6 +137,7 @@ class MainActivity2 : AppCompatActivity() {
         val sexo = binding.Sexo.text.toString()
         val fechaNac = binding.FechaNac.text.toString()
         val dni = binding.DNI.text.toString()
+        val urlFoto = intent.getStringExtra("url")
 
         val query: Query = database.child("animales")
 
@@ -150,6 +154,7 @@ class MainActivity2 : AppCompatActivity() {
                         referenciaDB.child("sexo").setValue(sexo)
                         referenciaDB.child("fechaNac").setValue(fechaNac)
                         referenciaDB.child("dni").setValue(dni)
+                        referenciaDB.child("urlFoto").setValue(urlFoto)
 
                         Snackbar.make(binding.root, "Actualización exitosa", Snackbar.LENGTH_SHORT).show()
                         animalEncontrado = true
@@ -222,12 +227,16 @@ class MainActivity2 : AppCompatActivity() {
                         val fechaNac = animalSnapshot.child("fechaNac").getValue(String::class.java)
                         val raza = animalSnapshot.child("raza").getValue(String::class.java)
                         val sexo = animalSnapshot.child("sexo").getValue(String::class.java)
+                        val urlFoto = animalSnapshot.child("urlFoto").getValue(String::class.java)
 
                         binding.Nombre.setText(nombre)
                         binding.Raza.setText(raza)
                         binding.Sexo.setText(sexo)
                         binding.FechaNac.setText(fechaNac)
                         binding.DNI.setText(dni)
+                        Glide.with(binding.imageView2.context)
+                            .load(urlFoto)
+                            .into(binding.imageView2)
 
                         animalEncontrado = true
                         break  // Salir del bucle después de encontrar el animal
@@ -246,6 +255,15 @@ class MainActivity2 : AppCompatActivity() {
         })
     }
 
+
+    private fun foto(){
+        binding.imageView2.setOnClickListener {
+            val intent = Intent(this, MainActivityApi::class.java)
+            intent.putExtra("usuario", usuario)
+            startActivity(intent)
+        }
+
+    }
     private fun limpiar(){
         binding.CodId.text?.clear()
         binding.Nombre.text?.clear()
