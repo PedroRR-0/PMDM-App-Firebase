@@ -6,15 +6,19 @@
     android:layout_height="140dp">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="110dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="390dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
@@ -22,6 +26,8 @@
                 android:layout_width="107dp"
                 android:layout_height="95dp"
                 android:layout_marginStart="32dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -31,8 +37,9 @@
                 android:id="@+id/tvAnimalName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@+id/ivAnimal"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="AnimalName" />
@@ -41,27 +48,32 @@
                 android:id="@+id/tvAnimalCod"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="24dp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvAnimalName"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Cod"/>
+                app:layout_constraintStart_toEndOf="@+id/ivAnimal"
+                app:layout_constraintTop_toBottomOf="@+id/tvAnimalName"
+                app:layout_constraintVertical_bias="0"
+                tools:text="Cod" />
 
             <Button
                 android:id="@+id/btnMas"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="50sp"
+                android:layout_height="50sp"
+                android:background="@drawable/card_background"
+                android:backgroundTint="@color/primary_color"
+                android:gravity="bottom|center|clip_vertical"
                 android:padding="0dp"
                 android:text="@string/mas"
-                android:textSize="25dp"
                 android:textColor="@color/white"
-                android:backgroundTint="@color/primary_color"
-                android:background="@drawable/card_background"
+                android:textSize="35sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/tvAnimalCod"
-                app:layout_constraintStart_toEndOf="@+id/tvAnimalName"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.917"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.492" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
