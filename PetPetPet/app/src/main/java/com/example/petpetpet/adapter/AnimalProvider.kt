@@ -21,8 +21,9 @@ class AnimalProvider {
                         val fechaNac = animalSnapshot.child("fechaNac").getValue(String::class.java)
                         val raza = animalSnapshot.child("raza").getValue(String::class.java)
                         val sexo = animalSnapshot.child("sexo").getValue(String::class.java)
+                        val image = animalSnapshot.child("image").getValue(String::class.java)
 
-                        val animal = Animal(codId.toString(), nombre.toString(), dni.toString(), fechaNac.toString(), raza.toString(), sexo.toString())
+                        val animal = Animal(codId.toString(), nombre.toString(), dni.toString(), fechaNac.toString(), raza.toString(), sexo.toString(), image.toString())
                         animalList.add(animal)
                     }
 

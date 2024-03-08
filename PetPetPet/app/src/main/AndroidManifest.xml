@@ -43,6 +43,10 @@
             android:name=".DatosAnimal"
             android:exported="false">
         </activity>
+        <activity
+                android:name=".MainActivityApi"
+                android:exported="false">
+        </activity>
     </application>
 
 </manifest>
