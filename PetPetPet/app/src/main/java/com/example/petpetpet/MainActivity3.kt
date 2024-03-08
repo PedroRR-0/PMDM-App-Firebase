@@ -35,11 +35,19 @@ class MainActivity3 : ComponentActivity() {
         binding.backToMainActivity2.setOnClickListener {
             val intent = Intent(this, MainActivity2::class.java)
             intent.putExtra("usuario", usuario)
+            intent.putExtra("url", "https://img2.rtve.es/i/?w=1600&i=01709869973062.jpg")
             startActivity(intent)
         }
+        onBackPressedDispatcher.addCallback(this, funPasParam)
+        funPasParam.isEnabled = true
 
     }
 
+    private val funPasParam = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            Toast.makeText(applicationContext, "No puede volver", Toast.LENGTH_SHORT).show()
+        }
+    }
     private fun mostrarUsuario(usuario: String?) {
         val textViewUsuario = binding.textView4
         textViewUsuario.text = buildString {
@@ -74,7 +82,7 @@ class MainActivity3 : ComponentActivity() {
                     binding.backToMainActivity2.visibility= View.INVISIBLE
                 }
             }.addOnFailureListener {
-                Snackbar.make(binding.root, "ce mnamoooooo", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "Error", Snackbar.LENGTH_SHORT).show()
             }
     }
 
